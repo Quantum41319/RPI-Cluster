@@ -14,6 +14,8 @@ RPI-Cluster Setup
 DockerSwarm
 Glusterfs
 
+step-by-step tutorial is not finished yet, to look it up visit: https://short.bitflips.org/zb94g
+
 ##########################################################################################
 FOR MORE AND MORE OFTEN UPDATED CONTENT, visit my own repository: 
 
