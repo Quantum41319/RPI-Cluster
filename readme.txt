@@ -12,5 +12,5 @@
 ##########################################################################################
 FOR MORE AND MORE OFTEN UPDATED CONTENT, visit my own repository: 
 
-https://git.bitflips.org/Quantum413/RPI-Cluster/
+https://short.bitflips.org/zb94g
 ##########################################################################################
