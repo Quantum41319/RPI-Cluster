@@ -1,0 +1,68 @@
+##########################################################################################
+#       HOW TO                                                                           #
+#       RasberryPi-Cluster                                                               #
+#                                                                                        #
+#                                                                                        #
+#                                                                                        #
+#                                                                                        #
+#                                                                                        #
+##########################################################################################
+
+get Rasbian on to your SD-Card with the RPI-Imager, use Rasbian 64bit
+modify Hostname to RPIx, and set a static IP on your router for the pi (after first boot up)
+
+RASBIAN:
+
+sudo apt-get update
+sudo apt-get upgrade -y
+sudo rpi-update
+sudo reboot
+
+DOCKER: (https://schroederdennis.de/tutorial-howto/raspberry-pi-cluster-mit-docker-swarm-hochverfuegbar-failover/)
+
+#install Docker
+curl -fsSL https://get.docker.com -o get-docker.sh
+sudo sh get-docker.sh
+sudo usermod -aG docker $USER
+
+#create Docker Cluster (only one time on your Leader-Node)
+sudo docker swarm init --advertise-addr <MANAGER-IP>
+
+#add Worker (run on leader/manager)
+sudo docker swarm join --token <dein-worker-token> <MANAGER-IP>:2377
+sudo docker swarm join-token worker
+
+#add Manager (run on leader/manager)
+sudo docker swarm join-token manager
+
+sudo docker swarm join --token <dein-MANAGER-token> <MANAGER-IP>:2377
+
+#Portainer Swarm Stack
+curl -L https://downloads.portainer.io/portainer-agent-stack.yml -o portainer-agent-stack.yml
+sudo docker stack deploy -c portainer-agent-stack.yml portainer
+
+#Nodes ansehen
+sudo docker node ls
+
+
+GlusterFS: (for Storage)
+sudo apt update
+sudo apt install glusterfs-server
+
+sudo systemctl start glusterd
+sudo systemctl enable glusterd
+
+sudo mkdir -p /mnt/cluster-volume-shared/brick
+
+gluster peer probe <NEW_NODE_IP> (on your Master)
+
+sudo gluster peer status
+
+gluster volume add-brick cluster-volume replica <NEW_REPLICA_COUNT> <NEW_NODE_IP>:/mnt/cluster-volume-shared/brick
+
+To mount a GlusterFS volume automatically at boot using /etc/fstab, follow these steps:
+sudo nano /etc/fstab
+<GLUSTERFS_SERVER>:/<VOLUME_NAME> /mnt/cluster-volume-shared glusterfs defaults,_netdev 0 0
+
+sudo mount -a
+systemctl daemon-reload
