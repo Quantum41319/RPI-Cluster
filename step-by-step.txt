@@ -18,7 +18,7 @@ sudo apt-get upgrade -y
 sudo rpi-update
 sudo reboot
 
-DOCKER: (https://schroederdennis.de/tutorial-howto/raspberry-pi-cluster-mit-docker-swarm-hochverfuegbar-failover/)
+DOCKER:
 
 #install Docker
 curl -fsSL https://get.docker.com -o get-docker.sh
@@ -46,13 +46,16 @@ sudo docker node ls
 
 
 GlusterFS: (for Storage)
+
+
 sudo apt update
 sudo apt install glusterfs-server
 
 sudo systemctl start glusterd
 sudo systemctl enable glusterd
 
-sudo mkdir -p /mnt/cluster-volume-shared/brick
+sudo mkdir -p /pathto/volume (brick)
+sudo mkdir -p /pathto/volume-shared (used for accessing files)
 
 gluster peer probe <NEW_NODE_IP> (on your Master)
 
@@ -66,3 +69,33 @@ sudo nano /etc/fstab
 
 sudo mount -a
 systemctl daemon-reload
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+inspired by:
+(https://schroederdennis.de/tutorial-howto/raspberry-pi-cluster-mit-docker-swarm-hochverfuegbar-failover/)
