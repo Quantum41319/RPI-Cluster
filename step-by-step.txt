@@ -23,7 +23,6 @@ DOCKER:
 #install Docker
 curl -fsSL https://get.docker.com -o get-docker.sh
 sudo sh get-docker.sh
-sudo usermod -aG docker $USER
 
 #create Docker Cluster (only one time on your Leader-Node)
 sudo docker swarm init --advertise-addr <MANAGER-IP>
@@ -37,7 +36,7 @@ sudo docker swarm join-token manager
 
 sudo docker swarm join --token <dein-MANAGER-token> <MANAGER-IP>:2377
 
-#Portainer Swarm Stack
+#Portainer Swarm Stack (to manage your Clustter)
 curl -L https://downloads.portainer.io/portainer-agent-stack.yml -o portainer-agent-stack.yml
 sudo docker stack deploy -c portainer-agent-stack.yml portainer
 
@@ -45,8 +44,7 @@ sudo docker stack deploy -c portainer-agent-stack.yml portainer
 sudo docker node ls
 
 
-GlusterFS: (for Storage)
-
+GlusterFS: (for shared Storage)(or you use Syncthing, but its not that fast and easy with permissions)
 
 sudo apt update
 sudo apt install glusterfs-server
